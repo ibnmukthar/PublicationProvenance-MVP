@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>W3azy Bib</title>
+</head>
+<body>
+    <h1>W3azy Bib</h1>
+    <form id="mintNftForm">
+        <label for="yourURL">URL:</label>
+        <input type="text" id="yourURL" name="yourURL" placeholder="Enter your URL" required>
+        <br><br>
+        <label for="recipientPublicKeyString">Recipient Public Key:</label>
+        <input type="text" id="recipientPublicKeyString" name="recipientPublicKeyString" placeholder="Enter recipient public key" required>
+        <br><br>
+        <button type="submit">Let's Go!</button>
+    </form>
+
+    <div id="output"></div>
+
+    <script>
+        document.getElementById("mintNftForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const yourURL = document.getElementById("yourURL").value;
+            const recipientPublicKeyString = document.getElementById("recipientPublicKeyString").value;
+
+            try {
+                const response = await fetch('/api/mint-nft', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ yourURL, recipientPublicKeyString })
+                });
+                
+                const data = await response.json();
+                document.getElementById("output").textContent = "NFT minted successfully! Transaction: " + data.transaction;
+            } catch (error) {
+                document.getElementById("output").textContent = "Error: " + error.message;
+            }
+        });
+    </script>
+</body>
+</html>
